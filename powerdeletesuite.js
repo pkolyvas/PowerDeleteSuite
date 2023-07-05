@@ -412,6 +412,9 @@ var pd = {
           pd.actions.page.shift();
           pd.actions.page.next();
         } else if (shouldBeActedOn) {
+          item.pdEdited = item.pdEdited || (
+            (item.data.body === pd.task.config.editText) || (item.data.selftext  === pd.task.config.editText)
+          );
           if (!item.pdEdited && ((item.data.is_self || item.kind == 't1') && pd.task.config.isEditing)) {
             pd.actions.edit(item);
           } else if (!item.pdDeleted && ((item.kind == 't3' && pd.task.config.isRemovingPosts) || (item.kind == 't1' && pd.task.config.isRemovingComments))) {
