@@ -158,6 +158,7 @@ var pd = {
             mod: 0,
             score: 0,
             date: 0,
+            match: 0,
           }
         },
         config: {
@@ -412,14 +413,16 @@ var pd = {
           pd.actions.page.shift();
           pd.actions.page.next();
         } else if (shouldBeActedOn) {
-          item.pdEdited = item.pdEdited || (
-            (item.data.body === pd.task.config.editText) || (item.data.selftext  === pd.task.config.editText)
-          );
-          if (!item.pdEdited && ((item.data.is_self || item.kind == 't1') && pd.task.config.isEditing)) {
+          var textMatch = (item.data.body === pd.task.config.editText) ||
+            (item.data.selftext  === pd.task.config.editText);
+          if (!item.pdEdited && ((item.data.is_self || item.kind == 't1') && pd.task.config.isEditing) && !textMatch) {
             pd.actions.edit(item);
           } else if (!item.pdDeleted && ((item.kind == 't3' && pd.task.config.isRemovingPosts) || (item.kind == 't1' && pd.task.config.isRemovingComments))) {
             pd.actions.delete(item);
           } else {
+            if (textMatch) {
+              pd.task.info.ignoreReasons['match'] ++;
+            } 
             pd.actions.children.finishItem();
             pd.actions.children.handleGroup();
           }
