@@ -422,6 +422,7 @@ var pd = {
           } else {
             if (textMatch) {
               pd.task.info.ignoreReasons['match'] ++;
+              pd.task.items[0].pdIgnored = true;
             } 
             pd.actions.children.finishItem();
             pd.actions.children.handleGroup();
